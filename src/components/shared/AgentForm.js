@@ -55,7 +55,7 @@ const AgentForm = (props) => {
                         onChange={handleChange}
                     />
                 </Form.Group>
-                <Button className='m-2' type="submit">Create Agent</Button>
+                <Button className='m-2' type="submit">Submit</Button>
             </Form>
         </Container>
     )

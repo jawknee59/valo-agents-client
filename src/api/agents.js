@@ -27,6 +27,16 @@ export const createAgent = (user, newAgent) => {
 }
 
 // Update (update a agent)
+export const updateAgent = (user, updatedAgent) => {
+    return axios({
+        url: `${apiUrl}/agents/${updatedAgent.id}`,
+        method: 'PATCH',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        },
+        data: { agent: updatedAgent }
+    })
+}
 
 // Delete (delete a agent)
 export const deleteAgent = (user, agentId) => {

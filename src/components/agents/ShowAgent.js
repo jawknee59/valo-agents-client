@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Container, Card, Button } from 'react-bootstrap'
-import { getOneAgent, deleteAgent } from '../../api/agents'
+import { getOneAgent, deleteAgent, updateAgent } from '../../api/agents'
 import messages from '../shared/AutoDismissAlert/messages'
 import LoadingScreen from '../shared/LoadingScreen'
+import EditAgentModal from './EditAgentModal'
 
 
 const ShowAgent = (props) => {
     const [agent, setAgent] = useState(null)
+    const [editModalShow, setEditModalShow] = useState(false)
+    const [updated, setUpdated] = useState(false)
 
     const { id } = useParams()
     const navigate = useNavigate()
@@ -26,7 +29,7 @@ const ShowAgent = (props) => {
                     variant: 'danger'
                 })
             })
-    }, [])
+    }, [updated])
 
     // Delete an Agent
     const removeThisAgent = () => {
@@ -69,9 +72,15 @@ const ShowAgent = (props) => {
                             agent.owner && user && agent.owner.id === user.id ?
                             <>
                                 <Button
+                                    className='m-2' variant='warning'
+                                    onClick={() => setEditModalShow(true)}    
+                                >
+                                    Edit {agent.name}
+                                </Button>
+                                <Button
                                     className='m-2' variant='danger'
                                     onClick={() => removeThisAgent()}
-                                    >
+                                >
                                     Delete {agent.name}
                                 </Button>
                             </>
@@ -80,6 +89,15 @@ const ShowAgent = (props) => {
                     </Card.Footer>
                 </Card>
             </Container>
+            <EditAgentModal 
+                user={user}
+                show={editModalShow}
+                handleClose={() => setEditModalShow(false)}
+                updateAgent={updateAgent}
+                msgAlert={msgAlert}
+                triggerRefresh={() => setUpdated(prev => !prev)}
+                agent={agent}
+            />
         </>
     )
 }

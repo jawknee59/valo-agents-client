@@ -1,28 +1,17 @@
-import { useState } from 'react'
-import { createAgent } from '../../api/agents'
-import messages from '../shared/AutoDismissAlert/messages'
+import React, { useState } from 'react'
+import { Modal } from 'react-bootstrap'
 import AgentForm from '../shared/AgentForm'
+import messages from '../shared/AutoDismissAlert/messages'
 
-import { useNavigate } from 'react-router-dom'
-
-const CreateAgent = (props) => {
-    const { user, msgAlert } = props
-
-    const navigate = useNavigate()
-    console.log('this is navigate', navigate)
+const EditAgentModal = (props) => {
+    const { user, show, handleClose, updateAgent, msgAlert, triggerRefresh } = props
     
-    const [agent, setAgent] = useState({
-        name: '',
-        agentNumber: '',
-        role: '',
-        country: ''
-    })
+    const [agent, setAgent] = useState(props.agent)
 
     const onChange = (e) => {
         e.persist()
 
         setAgent(prevAgent => {
-            console.log('this is e.target', e.target)
             const updatedName = e.target.name
             let updatedValue = e.target.value
 
@@ -45,35 +34,40 @@ const CreateAgent = (props) => {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        createAgent(user, agent)
-            // first we'll nav to the show page
-            .then(res => { navigate(`/agents/${res.data.agent.id}`)})
-            // we'll also send a success message
+        updateAgent(user, agent)
+            .then(() => handleClose())
             .then(() => {
                 msgAlert({
                     heading: 'Oh Yeah!',
-                    message: messages.createAgentSuccess,
+                    message: messages.updateAgentSuccess,
                     variant: 'success'
                 })
             })
             // if there is an error, tell the user about it
+            .then(() => triggerRefresh())
+            // if there is an error, tell the user about it
             .catch(() => {
                 msgAlert({
                     heading: 'Oh No!',
-                    message: messages.createAgentFailure,
+                    message: messages.updateAgentFailure,
                     variant: 'danger'
                 })
             })
     }
-
+ 
     return (
-        <AgentForm 
-            agent={agent}
-            handleChange={onChange}
-            handleSubmit={onSubmit}
-            heading="Create a new agent!"
-        />
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton />
+            <Modal.Body>
+                <AgentForm 
+                    agent={agent}
+                    handleChange={onChange}
+                    handleSubmit={onSubmit}
+                    heading="Update Agent"
+                />
+            </Modal.Body>
+        </Modal>
     )
 }
 
-export default CreateAgent
+export default EditAgentModal
