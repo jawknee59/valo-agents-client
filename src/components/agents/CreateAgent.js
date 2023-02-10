@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createAgent } from '../../api/agents'
-import { createAgentSuccess, createAgentFailure } from '../shared/AutoDismissAlert/messages'
+import messages from '../shared/AutoDismissAlert/messages'
 import AgentForm from '../shared/AgentForm'
 
 import { useNavigate } from 'react-router-dom'
@@ -52,7 +52,7 @@ const CreateAgent = (props) => {
             .then(() => {
                 msgAlert({
                     heading: 'Oh Yeah!',
-                    message: createAgentSuccess,
+                    message: messages.createAgentSuccess,
                     variant: 'success'
                 })
             })
@@ -60,7 +60,7 @@ const CreateAgent = (props) => {
             .catch(() => {
                 msgAlert({
                     heading: 'Oh No!',
-                    message: createAgentFailure,
+                    message: messages.createAgentFailure,
                     variant: 'danger'
                 })
             })

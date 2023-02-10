@@ -14,8 +14,8 @@ export const getOneAgent = (id) => {
 
 // Create (create a agent)
 export const createAgent = (user, newAgent) => {
-    console.log('this is the user', user)
-    console.log('this is the newAgent', newAgent)
+    // console.log('this is the user', user)
+    // console.log('this is the newAgent', newAgent)
     return axios({
         url: `${apiUrl}/agents`,
         method: 'POST',
@@ -29,4 +29,14 @@ export const createAgent = (user, newAgent) => {
 // Update (update a agent)
 
 // Delete (delete a agent)
+export const deleteAgent = (user, agentId) => {
+
+    return axios({
+        url: `${apiUrl}/agents/${agentId}`,
+        method: 'DELETE',
+        headers: {
+            Authorization: `Token token=${user.token}`
+        }
+    })
+}
 
